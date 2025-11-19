@@ -124,22 +124,22 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
         </div>
 
         <div className="flex max-w-[480px] pt-2 flex-col items-center relative">
-          <div className="text-white text-center font-inter text-lg font-bold leading-[22.5px] tracking-[-0.27px]">
+          <div className="text-white text-center font-inter text-lg font-bold">
             {uploadText}
           </div>
         </div>
 
-        <div className="flex max-w-[480px] flex-col items-center self-stretch relative">
-          <div className="self-stretch text-[#859ABB] text-center font-inter text-sm font-normal leading-[21px]">
+        <div className="flex max-w-[480px] flex-col items-center relative">
+          <div className="text-[#859ABB] text-center font-inter text-sm font-normal leading-[21px]">
             {hintText}
           </div>
         </div>
 
-        <div className="flex h-12 min-w-[84px] max-w-[200px] px-5 justify-center items-center self-stretch shadow-[0_4px_8px_3px_rgba(0,0,0,0.15),0_1px_3px_0_rgba(0,0,0,0.30)] relative">
+        <div className="flex h-12 min-w-[84px] max-w-[200px] px-5 justify-center items-center relative">
           <button
             type="button"
             onClick={handleButtonClick}
-            className="flex p-5 justify-center items-center gap-1 flex-1 self-stretch rounded-2xl bg-[#192734] text-white text-center font-inter text-base font-bold leading-6 tracking-[0.24px] hover:bg-[#192734]/90 transition-all outline-none"
+            className="flex p-5 justify-center items-center gap-1 flex-1 rounded-2xl bg-[#192734] text-white text-center font-inter text-base font-bold leading-6 tracking-[0.24px] hover:bg-[#192734]/90 shadow-[0_4px_8px_3px_rgba(0,0,0,0.15),0_1px_3px_0_rgba(0,0,0,0.30)] transition-all outline-none"
           >
             Browse Files
           </button>
