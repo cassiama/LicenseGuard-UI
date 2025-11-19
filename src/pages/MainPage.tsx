@@ -77,30 +77,10 @@ export const MainPage = () => {
           </div>
 
           {/* --- File Upload Section --- */}
-          {/* This logic matches your wireframe:
-              - If no file is uploaded OR we are loading, show the file-upload component.
-              - If a file IS uploaded AND we are NOT loading AND we have results, show the badge.
-          */}
-          {(!analysisResult || isLoading) && (
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-300">Requirements File</label>
-              {/* Assuming your FileUpload component has an onChange prop.
-                Adjust this prop name based on your component's API.
-              */}
-              <FileUpload onChange={handleFileChange} />
-            </div>
-          )}
-
-          {/* This is the "Success" state badge from your wireframe */}
-          {analysisResult && !isLoading && file && (
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-300">Requirements File</label>
-              <div className="flex items-center p-3 rounded-md bg-gray-700 max-w-md">
-                <FileText className="w-5 h-5 mr-3 text-gray-300" />
-                <span className="font-medium">{file.name}</span>
-              </div>
-            </div>
-          )}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-300">Requirements File</label>
+            <FileUpload onChange={handleFileChange} />
+          </div>
 
           {/* --- Analyze Button --- */}
           <div>
@@ -143,9 +123,9 @@ export const MainPage = () => {
             while it is still streaming. */}
         {analysisResult && (
           <div className="mt-8">
+            {/* Optional: A small indicator that the stream is still active */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white">Analysis Result</h2>
-              {/* Optional: A small indicator that the stream is still active */}
               {isLoading && (
                 <span className="flex items-center text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded">
                   <Loader2 className="w-3 h-3 mr-2 animate-spin" />
@@ -153,6 +133,7 @@ export const MainPage = () => {
                 </span>
               )}
             </div>
+            {/* The generated analysis report formatted in Markdown */}
             <div className="p-6 bg-gray-800 rounded-lg border border-gray-700 shadow-lg text-gray-300 space-y-4">
               <ReactMarkdown
                 components={{
