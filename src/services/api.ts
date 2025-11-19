@@ -1,0 +1,84 @@
+const API_URL = `${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}`;
+const AGENT_URL = `${import.meta.env.VITE_AI_AGENT_HOST}:${import.meta.env.VITE_AI_AGENT_PORT}`
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("authToken");
+  return {
+    "Authorization": `Bearer ${token}`,
+  };
+};
+
+// POST /users/token
+export const loginUser = async (email: string, password: string) => {
+  const formData = new URLSearchParams();
+  // The backend /token route expects a field named "username"
+  // We are passing the "email" from the UI as the "username"
+  formData.append("username", email);
+  formData.append("password", password);
+
+  const response = await fetch(`${API_URL}/users/token`, {
+    method: "POST",
+    // DO NOT set "Content-Type: application/json"
+    // The browser will automatically set "Content-Type: application/x-www-form-urlencoded"
+    body: formData,
+  });
+  if (!response.ok) throw new Error("Login failed");
+  return response.json(); // Expects { "access_token": "..." }
+};
+
+// POST /users
+export const registerUser = async (email: string, password: string) => {
+  const response = await fetch(`${API_URL}/users`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // Your UserCreate schema expects "username", so we send the "email" as "username"
+    body: JSON.stringify({ username: email, password: password }),
+  });
+  if (!response.ok) throw new Error("Registration failed");
+  return response.json();
+};
+
+/**
+ * This is the main function. It calls your MCP server"s streaming endpoint.
+ * It assumes POST /analyze is the endpoint that streams Markdown.
+ */
+export const getAnalysisStream = async (
+  projectName: string, 
+  file: File, 
+  onChunk: (chunk: string) => void
+) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Not authenticated. Please log in.");
+  // TODO: add logic that forces the user to log in again IF the token has expired
+
+  // We are sending FormData to the new endpoint
+  const formData = new FormData();
+  formData.append("project_name", projectName);
+  formData.append("requirements_file", file);
+
+  const response = await fetch(`${AGENT_URL}/generate/report`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "text/plain"
+    },
+    body: formData, // Send as FormData
+  });
+
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Analysis request failed: ${errorText}`);
+  }
+  if (!response.body) {
+    throw new Error("No response body from stream");
+  }
+
+  // Handle the stream
+  const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    onChunk(value); // Pass the decoded text chunk
+  }
+};
