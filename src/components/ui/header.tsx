@@ -40,9 +40,9 @@ const Header = ({ onLogout }: HeaderProps) => {
       <div className="flex items-center justify-between">
         <div className="flex gap-4">
           <ShieldIcon />
-          <h1 className="text-xl font-bold leading-[25px] tracking-[-0.3px] text-[#859ABB]">
+          <span className="text-xl font-bold leading-[25px] tracking-[-0.3px] text-[#859ABB]">
             LicenseGuard
-          </h1>
+          </span>
         </div>
         <Button variant="link" rightIcon={<LogoutIcon />} onClick={onLogout}>
           Logout
