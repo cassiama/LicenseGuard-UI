@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import ReactMarkdown from 'react-markdown';
 import { getAnalysisStream } from '../services/api';
 import { useAuth } from '../contexts/auth-context';
@@ -23,31 +24,35 @@ export const MainPage = () => {
     setError(null);
   };
 
-  const handleSubmit = async () => {
-    if (!file || !projectName) {
-      setError("Please provide a project name and a requirements.txt file.");
-      return;
-    }
+  const handleSubmit = useDebouncedCallback(
+    async () => {
+      if (!file || !projectName) {
+        setError("Please provide a project name and a requirements.txt file.");
+        return;
+      }
 
-    setIsLoading(true);
-    setError(null);
-    // clear the previous analysis when a new file is selected
-    setAnalysisResult("");
+      setIsLoading(true);
+      setError(null);
+      // clear the previous analysis when a new file is selected
+      setAnalysisResult("");
 
-    try {
-      await getAnalysisStream(
-        projectName,
-        file,
-        (chunk) => {
-          setAnalysisResult((prev) => prev + chunk);
-        }
-      );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      try {
+        await getAnalysisStream(
+          projectName,
+          file,
+          (chunk) => {
+            setAnalysisResult((prev) => prev + chunk);
+          }
+        );
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred.");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    500,
+    { leading: true, trailing: false }
+  );
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
