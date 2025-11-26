@@ -17,7 +17,7 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
   }, ref) => {
     const [file, setFile] = React.useState<File | null>(null);
     // TODO: add more functionality for dragging files onto the component
-    const [isDragging, setIsDragging] = React.useState(false);
+    const [, setIsDragging] = React.useState(false);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     React.useImperativeHandle(ref, () => inputRef.current!)
@@ -35,36 +35,35 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
     }
 
     const handleDragOver = (e: React.DragEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-      setIsDragging(true)
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(true);
     }
 
     const handleDragLeave = (e: React.DragEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-      setIsDragging(false)
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
     }
 
     const handleDrop = (e: React.DragEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-      setIsDragging(false)
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
 
       const droppedFile = e.dataTransfer.files?.[0] || null
-      handleFileChange(droppedFile)
+      handleFileChange(droppedFile);
     }
 
     const handleButtonClick = () => {
-      inputRef.current?.click()
+      inputRef.current?.click();
     }
 
     const handleRemoveFile = () => {
-      setFile(null)
-      if (inputRef.current) {
-        inputRef.current.value = ''
-      }
-      onChange?.(null)
+      setFile(null);
+      if (inputRef.current)
+        inputRef.current.value = '';
+      onChange?.(null);
     }
 
     if (file) {

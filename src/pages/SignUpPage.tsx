@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../services/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Mail, Lock, Eye } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 
 export const SignUpPage = () => {
   const [email, setEmail] = useState('');

@@ -1,12 +1,12 @@
 const API_URL = `${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}`;
 const AGENT_URL = `${import.meta.env.VITE_AI_AGENT_HOST}:${import.meta.env.VITE_AI_AGENT_PORT}`
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("authToken");
-  return {
-    "Authorization": `Bearer ${token}`,
-  };
-};
+// const getAuthHeaders = () => {
+//   const token = localStorage.getItem("authToken");
+//   return {
+//     "Authorization": `Bearer ${token}`,
+//   };
+// };
 
 // calls "POST /users/token"
 export const loginUser = async (email: string, password: string) => {
