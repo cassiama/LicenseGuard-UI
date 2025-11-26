@@ -34,7 +34,7 @@ interface HeaderProps {
   onLogout?: () => void
 }
 
-export function Header({ onLogout }: HeaderProps) {
+const Header = ({ onLogout }: HeaderProps) => {
   return (
     <header className="border-b-[1.25px] border-[#384454] px-6 py-4">
       <div className="flex items-center justify-between">
@@ -51,3 +51,7 @@ export function Header({ onLogout }: HeaderProps) {
     </header>
   )
 }
+
+Header.displayName = "Header";
+
+export { Header };

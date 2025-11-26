@@ -15,17 +15,16 @@ export const SignUpPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match.");
       return;
     }
     setError('');
     try {
       await registerUser(email, password);
-      // Automatically navigate to sign-in after successful registration
+      // after we successively registered, we should redirect to the login page
       navigate('/login');
     } catch (err) {
-      // TODO:
-      setError('Failed to create account. Email may already be in use.');
+      setError("Failed to create account. Email may already be in use.");
     }
   };
 
@@ -37,6 +36,7 @@ export const SignUpPage = () => {
           <p className="text-gray-400">Get started with LicenseGuard.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* TODO: add another field for usernames */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-300">Email</label>
             <Input

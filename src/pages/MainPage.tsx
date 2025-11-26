@@ -4,9 +4,9 @@ import { getAnalysisStream } from '../services/api';
 import { useAuth } from '../contexts/auth-context';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { FileUpload } from '../components/ui/file-upload'; // Using your component
-import { Header } from '../components/ui/header';       // Using your component
-import { Loader2, FileText, AlertCircle } from 'lucide-react';
+import { FileUpload } from '../components/ui/file-upload';
+import { Header } from '../components/ui/header';
+import { Loader2, AlertCircle } from 'lucide-react';
 
 export const MainPage = () => {
   const { logout } = useAuth();
@@ -18,20 +18,21 @@ export const MainPage = () => {
 
   const handleFileChange = (selectedFile: File | null) => {
     setFile(selectedFile);
-    // When a new file is selected, clear the previous results
-    setAnalysisResult('');
+    // clear the previous analysis when a new file is selected
+    setAnalysisResult("");
     setError(null);
   };
 
   const handleSubmit = async () => {
     if (!file || !projectName) {
-      setError('Please provide a project name and a requirements.txt file.');
+      setError("Please provide a project name and a requirements.txt file.");
       return;
     }
 
     setIsLoading(true);
     setError(null);
-    setAnalysisResult(''); // Clear previous results
+    // clear the previous analysis when a new file is selected
+    setAnalysisResult("");
 
     try {
       await getAnalysisStream(
@@ -42,7 +43,7 @@ export const MainPage = () => {
         }
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+      setError(err instanceof Error ? err.message : "An unknown error occurred.");
     } finally {
       setIsLoading(false);
     }
@@ -50,9 +51,6 @@ export const MainPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Assuming your Header component takes a 'onLogout' prop.
-        If not, you can build the logout logic right here.
-      */}
       <Header onLogout={logout} />
 
       <main className="max-w-4xl p-8 mx-auto">
@@ -64,25 +62,25 @@ export const MainPage = () => {
         </div>
 
         <div className="mt-8 space-y-6">
-          {/* --- Form Section --- */}
+          {/* Form */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-300">Project Name</label>
             <Input
               type="text"
-              placeholder="e.g., My Awesome App"
+              placeholder="MyReallyAwesomeApp"
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               className="max-w-md"
             />
           </div>
 
-          {/* --- File Upload Section --- */}
+          {/* File Upload */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-300">Requirements File</label>
             <FileUpload onChange={handleFileChange} />
           </div>
 
-          {/* --- Analyze Button --- */}
+          {/* Analyze Button */}
           <div>
             <Button
               onClick={handleSubmit}
@@ -92,23 +90,22 @@ export const MainPage = () => {
               {isLoading ? (
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
               ) : (
-                'Analyze'
+                "Analyze"
               )}
             </Button>
           </div>
         </div>
 
-        {/* --- Error Display --- */}
+        {/* Displaying Errors */}
         {error && (
           <div className="mt-8 p-4 text-red-300 bg-red-900/50 rounded-lg flex items-center">
             <AlertCircle className="w-5 h-5 mr-3" />
-            <p><strong>Error:</strong> {error}</p>
+            <p><span className="text-bold">Error:</span> {error}</p>
           </div>
         )}
 
-        {/* --- Results Section (Success State) --- */}
-        {/* Show this ONLY if we are loading BUT haven't received any text yet. 
-        This covers the time the agent is running the 'call_tool' node. */}
+        {/* Analysis Results */}
+        {/* this is shown ONLY if we are loading BUT haven't received any text yet. this is because we need to wait for the time when the agent is running the 'call_tool' node. */}
         {isLoading && !analysisResult && (
           <div className="mt-8 p-8 bg-gray-800/50 rounded-lg border border-gray-700 flex flex-col items-center justify-center text-center animate-pulse">
             <Loader2 className="w-8 h-8 text-blue-400 animate-spin mb-4" />
@@ -118,12 +115,10 @@ export const MainPage = () => {
             </p>
           </div>
         )}
-        {/* Show this as soon as we have ANY content (analysisResult is truthy). 
-            We do NOT check !isLoading here, because we want to see the text 
-            while it is still streaming. */}
+        {/* this is shown when we have ANY content. we don't check if it's not loading because we want to see the text while it is still streaming. */}
         {analysisResult && (
           <div className="mt-8">
-            {/* Optional: A small indicator that the stream is still active */}
+            {/* small indicator that the stream is still active */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white">Analysis Result</h2>
               {isLoading && (
@@ -133,39 +128,39 @@ export const MainPage = () => {
                 </span>
               )}
             </div>
-            {/* The generated analysis report formatted in Markdown */}
+            {/* the generated analysis report formatted in Markdown */}
             <div className="p-6 bg-gray-800 rounded-lg border border-gray-700 shadow-lg text-gray-300 space-y-4">
               <ReactMarkdown
                 components={{
-                  // Style the H2 (##)
+                  // style the H2 ("##" type shit)
                   h2: ({ ...props }) => (
                     <h2 className="text-2xl font-bold text-blue-400 mt-6 mb-3 border-b border-gray-700 pb-2" {...props} />
                   ),
-                  // Style the H3 (###)
+                  // style the H3 ("###" type shit)
                   h3: ({ ...props }) => (
                     <h3 className="text-xl font-semibold text-white mt-4 mb-2 flex items-center gap-2" {...props} />
                   ),
-                  // Style the Lists
+                  // style the Lists
                   ul: ({ ...props }) => (
                     <ul className="list-disc list-outside space-y-1 ml-4" {...props} />
                   ),
                   li: ({ ...props }) => (
                     <li className="text-gray-300 marker:text-blue-500" {...props} />
                   ),
-                  // Style the Bold text
+                  // style the bold text ("**" type shit)
                   strong: ({ ...props }) => (
                     <strong className="font-bold text-blue-200" {...props} />
                   ),
-                  // Style the Code snippets (`package`)
+                  // style the code fence text (`package`)
                   code: ({ className, children, ...props }) => {
-                    // Check if it's an inline code snippet or a block
+                    // check if it's an inline code snippet or a block
                     const match = /language-(\w+)/.exec(className || '')
                     return !match ? (
                       <code className="bg-gray-900 text-yellow-300 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
                         {children}
                       </code>
                     ) : (
-                      // Fallback for code blocks if you have them
+                      // otherwise, just use the HTML tags for code blocks
                       <pre className="bg-gray-950 p-4 rounded-lg overflow-x-auto">
                         <code className={className} {...props}>{children}</code>
                       </pre>

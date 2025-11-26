@@ -15,9 +15,10 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
     onChange,
     ...props 
   }, ref) => {
-    const [file, setFile] = React.useState<File | null>(null)
-    const [isDragging, setIsDragging] = React.useState(false)
-    const inputRef = React.useRef<HTMLInputElement>(null)
+    const [file, setFile] = React.useState<File | null>(null);
+    // TODO: add more functionality for dragging files onto the component
+    const [isDragging, setIsDragging] = React.useState(false);
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
     React.useImperativeHandle(ref, () => inputRef.current!)
 
@@ -149,6 +150,6 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
   }
 )
 
-FileUpload.displayName = "FileUpload"
+FileUpload.displayName = "FileUpload";
 
-export { FileUpload }
+export { FileUpload };

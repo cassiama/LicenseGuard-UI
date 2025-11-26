@@ -2,24 +2,24 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/auth-context';
 import { loginUser } from '../services/api';
-import { Button } from '../components/ui/button'; // Using your components
-import { Input } from '../components/ui/input';   // Using your components
-import { Mail, Lock, Eye } from 'lucide-react';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Mail, Lock } from 'lucide-react';
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     try {
       const data = await loginUser(email, password);
-      login(data.access_token); // Assuming the token is in 'access_token'
-      navigate('/');
+      login(data.access_token);
+      navigate("/");
     } catch (err) {
       setError('Invalid email or password. Please try again.');
     }
@@ -33,6 +33,7 @@ export const LoginPage = () => {
           <p className="text-gray-400">Welcome back! Please sign in to your account.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* TODO: change this to accept an username instead of an email */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-300">Email</label>
             <Input
