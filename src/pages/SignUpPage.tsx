@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDebouncedCallback } from "use-debounce";
 import { registerUser } from "../services/api";
 import { signUpSchema } from "../lib/validators";
 import { Button } from "../components/ui/button";
@@ -15,36 +14,34 @@ export const SignUpPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = useDebouncedCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError("");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
 
-      // validate inputs with Zod
-      const validation = signUpSchema.safeParse({
-        username: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      });
+    // validate inputs with Zod
+    const validation = signUpSchema.safeParse({
+      username: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    });
 
-      if (!validation.success) {
-        const firstError = validation.error.issues[0];
-        setError(firstError.message);
-        return;
-      }
-
-      setIsSubmitting(true);
-      try {
-        await registerUser(email, password);
-        // after we successively registered, we should redirect to the login page
-        navigate("/login");
-      } catch {
-        setError("Failed to create account. Email may already be in use.");
-      } finally {
-        setIsSubmitting(false);
-      }
+    if (!validation.success) {
+      const firstError = validation.error.issues[0];
+      setError(firstError.message);
+      return;
     }
-  );
+
+    setIsSubmitting(true);
+    try {
+      await registerUser(email, password);
+      // after we successively registered, we should redirect to the login page
+      navigate("/login");
+    } catch {
+      setError("Failed to create account. Email may already be in use.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">

@@ -5,20 +5,6 @@ import { MemoryRouter } from "react-router-dom";
 import { SignUpPage } from "@/pages/SignUpPage";
 import * as api from "@/services/api";
 
-// mock 'useDebouncedCallback' to be a pass-through (no debounce in tests)
-vi.mock("use-debounce", () => ({
-  useDebouncedCallback: <T extends (...args: unknown[]) => unknown>(
-    fn: T,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _delay?: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _options?: unknown
-  ): T => {
-    // Wrap the function to ensure proper invocation
-    return ((...args: unknown[]) => fn(...args)) as T;
-  },
-}));
-
 // mock the API module
 vi.mock("@/services/api", () => ({
   registerUser: vi.fn(),
@@ -76,12 +62,7 @@ describe("SignUpPage Component", () => {
   });
 
   describe("Password Mismatch Detection", () => {
-    // SKIPPED: Form submission not triggering handleSubmit callback
-    // Issue: useDebouncedCallback mock returns function but form onSubmit doesn't invoke it
-    // Debug: Form renders correctly, fields populate, but handleSubmit never executes
-    // Evidence: registerUser has 0 calls, validation errors never appear
-    // Root cause: Complex interaction between mock, React form handling, and Testing Library
-    it.skip("should detect when passwords are mismatched", { timeout: 10000 }, async () => {
+    it("should detect when passwords are mismatched", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 
@@ -157,15 +138,11 @@ describe("SignUpPage Component", () => {
       expect(mockNavigate).not.toHaveBeenCalled();
     });
 
-    // SKIPPED: Same issue - handleSubmit callback not invoked
-    // Debug: HTML shows form with value="abc" (field populated correctly)
-    // Debug: Button click registered but onSubmit handler never fires
-    // Debug: api.registerUser shows 0 calls (validation never runs)
-    it.skip("should handle email that is too short", { timeout: 10000 }, async () => {
+    it("should handle email that is too short", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 
-      await fillForm(user, "abc", "password123", "password123");
+      await fillForm(user, "a@b", "password123", "password123");
       await submitForm(user);
 
       await waitFor(() => {
@@ -223,15 +200,11 @@ describe("SignUpPage Component", () => {
   });
 
   describe("Error Message Display and Clearing", () => {
-    // SKIPPED: handleSubmit not executing - validation code never runs
-    // Debug: Form state shows email="abc", password="password123", confirmPassword="password123"
-    // Debug: Submit button clicked successfully but handler doesn't fire
-    // Attempted fixes: Wrapped mock function, added optional params, still fails
-    it.skip("should display error message when validation fails", { timeout: 10000 }, async () => {
+    it("should display error message when validation fails", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 
-      await fillForm(user, "abc", "password123", "password123");
+      await fillForm(user, "a@b", "password123", "password123");
       await submitForm(user);
 
       await waitFor(() => {
@@ -239,17 +212,13 @@ describe("SignUpPage Component", () => {
       });
     });
 
-    // SKIPPED: First submission doesn't trigger handler, so error never appears
-    // Debug: Both form submissions render correctly but neither invokes handleSubmit
-    // Debug: Mock setup correct (registerUser mocked), but never called
-    // Pattern: All tests expecting validation errors fail the same way
-    it.skip("should clear error message when user corrects input and resubmits", { timeout: 10000 }, async () => {
+    it("should clear error message when user corrects input and resubmits", async () => {
       const user = userEvent.setup();
       vi.mocked(api.registerUser).mockResolvedValue({ success: true });
       renderSignUpPage();
 
       // first submission with invalid data
-      await fillForm(user, "abc", "password123", "password123");
+      await fillForm(user, "a@b", "password123", "password123");
       await submitForm(user);
 
       await waitFor(() => {
@@ -266,11 +235,7 @@ describe("SignUpPage Component", () => {
       });
     });
 
-    // SKIPPED: Password mismatch validation never runs (handleSubmit not called)
-    // Debug: Form shows password="password123", confirmPassword="password456" (correct values)
-    // Debug: Button click works, but form onSubmit doesn't invoke the debounced handler
-    // Hypothesis: useDebouncedCallback returns something React's onSubmit doesn't recognize
-    it.skip("should clear password mismatch error when passwords are corrected", { timeout: 10000 }, async () => {
+    it("should clear password mismatch error when passwords are corrected", async () => {
       const user = userEvent.setup();
       vi.mocked(api.registerUser).mockResolvedValue({ success: true });
       renderSignUpPage();
@@ -293,16 +258,12 @@ describe("SignUpPage Component", () => {
       });
     });
 
-    // SKIPPED: Multiple validation errors test - same root cause
-    // Debug: Form state correct (email="ab", password="pw", confirmPassword="different")
-    // Debug: All three validation errors should trigger, but validation never runs
-    // Note: Tests that DON'T expect validation errors (e.g., successful submissions) pass fine
-    it.skip("should show only one error at a time", { timeout: 10000 }, async () => {
+    it("should show only one error at a time", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 
       // submit with multiple validation errors
-      await fillForm(user, "ab", "pw", "different");
+      await fillForm(user, "a@b", "pw", "different");
       await submitForm(user);
 
       await waitFor(() => {
@@ -405,19 +366,16 @@ describe("SignUpPage Component", () => {
       });
     });
 
-    // SKIPPED: Same handleSubmit issue - form submission not triggering
-    // Debug: Form shows email="abcd", password="password123" (correct values)
-    // Debug: registerUser has 0 calls - handleSubmit never executes
-    it.skip("should accept email with minimum valid length", { timeout: 10000 }, async () => {
+    it("should accept email with minimum valid length", async () => {
       const user = userEvent.setup();
       vi.mocked(api.registerUser).mockResolvedValue({ success: true });
       renderSignUpPage();
 
-      await fillForm(user, "abcd", "password123", "password123");
+      await fillForm(user, "a@bc", "password123", "password123");
       await submitForm(user);
 
       await waitFor(() => {
-        expect(api.registerUser).toHaveBeenCalledWith("abcd", "password123");
+        expect(api.registerUser).toHaveBeenCalledWith("a@bc", "password123");
       });
     });
 
@@ -535,15 +493,11 @@ describe("SignUpPage Component", () => {
   });
 
   describe("Form Validation Priority", () => {
-    // SKIPPED: Same handleSubmit issue - validation priority can't be tested
-    // Debug: Form with email="ab", password="password123", confirmPassword="password456"
-    // Debug: Should show email error first, but validation never runs
-    // Note: These tests verify validation order, but require handleSubmit to execute
-    it.skip("should validate email length before password match", { timeout: 10000 }, async () => {
+    it("should validate email length before password match", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 
-      await fillForm(user, "ab", "password123", "password456");
+      await fillForm(user, "a@b", "password123", "password456");
       await submitForm(user);
 
       await waitFor(() => {
@@ -555,10 +509,7 @@ describe("SignUpPage Component", () => {
       expect(screen.queryByText(/passwords do not match/i)).toBeNull();
     });
 
-    // SKIPPED: Password length validation priority test - same root cause
-    // Debug: Form state correct but handleSubmit doesn't fire
-    // These validation priority tests all fail for the same reason
-    it.skip("should validate password length before password match", async () => {
+    it("should validate password length before password match", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 
@@ -574,10 +525,7 @@ describe("SignUpPage Component", () => {
       expect(screen.queryByText(/passwords do not match/i)).toBeNull();
     });
 
-    // SKIPPED: Password mismatch priority test - handleSubmit not executing
-    // Debug: All validation priority tests fail because validation code never runs
-    // Summary: 9 total tests skipped due to useDebouncedCallback mock issue
-    it.skip("should show password mismatch only after other validations pass", async () => {
+    it("should show password mismatch only after other validations pass", async () => {
       const user = userEvent.setup();
       renderSignUpPage();
 

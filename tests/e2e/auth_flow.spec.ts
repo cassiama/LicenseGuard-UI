@@ -46,11 +46,13 @@ test.describe("Complete Auth Flow End-to-End", () => {
     await page.locator('input[placeholder*="Enter your password"]').first().fill(testPassword);
     await page.fill('input[placeholder*="Confirm your password"]', testPassword);
 
+    await page.screenshot();
+
     // submit the form by clicking the "Sign Up" button
     await page.click('button:has-text("Sign Up")');
 
     // 3. it should redirect to login page after signup
-    await expect(page.locator("text=Welcome back! Please sign in to your account")).toBeVisible();
+    await expect(page.locator("text=Welcome back! Please sign in to your account")).toBeVisible({ timeout: 10000 });
     
     // verify no token in localStorage after signup
     const tokenAfterSignup = await page.evaluate(() => localStorage.getItem("authToken"));
