@@ -7,7 +7,7 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   test: {
     globals: true,
-    environment: "node",
+    environment: "jsdom",
     exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
   },
   plugins: [react(), tailwindcss()],

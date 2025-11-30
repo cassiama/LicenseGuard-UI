@@ -27,7 +27,7 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
 
     const handleFileChange = (selectedFile: File | null) => {
       if (selectedFile) {
-        // Check MIME type first
+        // check if it has the correct MIME type first
         if (selectedFile.type !== "text/plain") {
           setError("Only text files are allowed (MIME type: text/plain)");
           setFile(null);
@@ -35,23 +35,23 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
           return;
         }
         
-        // Check file extension
-        if (selectedFile && !selectedFile.name.endsWith('.txt')) {
-          setError('Only .txt files are allowed');
+        // check if it has the correct file extension
+        if (selectedFile && !selectedFile.name.endsWith(".txt")) {
+          setError("Only .txt files are allowed");
           setFile(null);
           onChange?.(null);
           return;
         }
         
-        // Check file size
+        // check if it doesn't exceed the maximum file size (1 MB)
         if (selectedFile.size > MAX_FILE_SIZE) {
-          setError('File size must not exceed 1 MB');
+          setError("File size must not exceed 1 MB");
           setFile(null);
           onChange?.(null);
           return;
         }
         
-        // All validations passed
+        // once all validations passed, set the file to be selected
         setError(null);
         setFile(selectedFile);
         onChange?.(selectedFile);
@@ -92,7 +92,7 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
       setFile(null);
       setError(null);
       if (inputRef.current)
-        inputRef.current.value = '';
+        inputRef.current.value = "";
       onChange?.(null);
     }
 
