@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useDebouncedCallback } from 'use-debounce';
-import { registerUser } from '../services/api';
-import { signUpSchema } from '../lib/validators';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Mail, Lock } from 'lucide-react';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useDebouncedCallback } from "use-debounce";
+import { registerUser } from "../services/api";
+import { signUpSchema } from "../lib/validators";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Mail, Lock } from "lucide-react";
 
 export const SignUpPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = useDebouncedCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      setError('');
+      setError("");
 
       // validate inputs with Zod
       const validation = signUpSchema.safeParse({
@@ -37,15 +37,13 @@ export const SignUpPage = () => {
       try {
         await registerUser(email, password);
         // after we successively registered, we should redirect to the login page
-        navigate('/login');
+        navigate("/login");
       } catch {
         setError("Failed to create account. Email may already be in use.");
       } finally {
         setIsSubmitting(false);
       }
-    },
-    1000,
-    { leading: true, trailing: false }
+    }
   );
 
   return (
@@ -89,7 +87,7 @@ export const SignUpPage = () => {
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating Account...' : 'Sign Up'}
+            {isSubmitting ? "Creating Account..." : "Sign Up"}
           </Button>
         </form>
         <p className="text-sm text-center text-gray-400">
