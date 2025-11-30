@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'ui/**'
   pull_request:
-    paths:
-      - 'ui/**'
+    branches:
+      - main
 
 jobs:
   quality-checks:
@@ -30,8 +28,11 @@ jobs:
       - name: Lint
         run: npm run lint
       
-      - name: Test
+      - name: Test (Vitest)
         run: npm run test
+
+      - name: Test (Playwright)
+        run: npm run test:e2e
       
       - name: Build
         run: npm run build
