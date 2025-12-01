@@ -16,6 +16,9 @@ test.describe("Complete Auth Flow End-to-End", () => {
   const testPassword = "E2EPassword123!";
 
   test.beforeEach(async ({ page }) => {
+    page.on("request", req => {
+      console.log(">> ", req.method(), req.url());
+    });
     // clear localStorage before each test
     await page.goto("/");
     await page.evaluate(() => localStorage.clear());
@@ -23,7 +26,7 @@ test.describe("Complete Auth Flow End-to-End", () => {
 
   test("should complete full flow: signup -> login -> access main page -> logout", async ({ page }) => {
     // 1. mock the registration API endpoint
-    await page.route("**/users", async (route) => {
+    await page.route(/.*\/users\/?$/, async (route) => {
       if (route.request().method() === "POST") {
         await route.fulfill({
           status: 200,
@@ -32,7 +35,9 @@ test.describe("Complete Auth Flow End-to-End", () => {
             message: "User created successfully"
           })
         });
-      }
+      } else
+        // NOTE: doing this allows other methods (like OPTIONS) to proceed
+        await route.continue();
     });
 
     // 2. navigate to signup page
@@ -59,15 +64,19 @@ test.describe("Complete Auth Flow End-to-End", () => {
     expect(tokenAfterSignup).toBeNull();
 
     // 4. mock the login API endpoint
-    await page.route("**/users/token", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          access_token: "mock-jwt-token-12345",
-          token_type: "bearer"
-        })
-      });
+    await page.route(/.*\/users\/token\/?$/, async (route) => {
+      if (route.request().method() === "POST") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            access_token: "mock-jwt-token-12345",
+            token_type: "bearer"
+          })
+        });
+      }  else
+        // NOTE: doing this allows other methods (like OPTIONS) to proceed
+        await route.continue();
     });
 
     // 5. login with the newly created account
