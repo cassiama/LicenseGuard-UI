@@ -30,10 +30,10 @@ jobs:
       - name: Lint
         run: pnpm run lint
       
-      - name: Test (Vitest)
+      - name: Run the Vitest tests
         run: pnpm run test
 
-      - name: Test (Playwright)
+      - name: Run the Playwright tests
         run: pnpm run test:e2e
         env:
           # NOTE: the values don't matter, as long as it can be formed into a real URL
