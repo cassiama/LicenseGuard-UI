@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDebouncedCallback } from 'use-debounce';
 import { useAuth } from '../contexts/auth-context';
 import { loginUser } from '../services/api';
 import { loginSchema } from '../lib/validators';
@@ -16,8 +15,7 @@ export const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = useDebouncedCallback(
-    async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       setError("");
       
@@ -43,10 +41,7 @@ export const LoginPage = () => {
       } finally {
         setIsSubmitting(false);
       }
-    },
-    1000,
-    { leading: true, trailing: false }
-  );
+    };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
