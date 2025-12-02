@@ -185,7 +185,7 @@ describe("MainPage Component", () => {
 
       // second submission succeeds
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Complete");
         }
       );
@@ -204,7 +204,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## First Analysis Result\n\nSome content here");
         }
       );
@@ -276,7 +276,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Content");
         }
       );
@@ -333,7 +333,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Complete");
         }
       );
@@ -389,7 +389,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis\n\n");
           await new Promise((resolve) => setTimeout(resolve, 100));
           onChunk("More content...");
@@ -418,7 +418,7 @@ describe("MainPage Component", () => {
       
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           for (const chunk of chunks) {
             await new Promise((resolve) => setTimeout(resolve, 10));
             onChunk(chunk);
@@ -444,7 +444,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("First chunk. ");
           await new Promise((resolve) => setTimeout(resolve, 10));
           onChunk("Second chunk. ");
@@ -468,7 +468,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Dependencies\n\n");
           await new Promise((resolve) => setTimeout(resolve, 10));
           onChunk("- flask==2.0.1\n");
@@ -493,7 +493,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Complete");
         }
       );
@@ -518,7 +518,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function to ultimately fail
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Started\n\n");
           await new Promise((resolve) => setTimeout(resolve, 10));
           onChunk("First chunk received. ");
@@ -541,7 +541,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function to ultimately fail
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("Partial content...");
           throw new Error("Network error occurred");
         }
@@ -561,7 +561,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function to ultimately fail
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("Some content");
           throw new Error("Error occurred");
         }
@@ -583,7 +583,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function to ultimately fail
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Partial Analysis\n\n");
           onChunk("This content was received before error.");
           throw new Error("Error after partial content");
@@ -650,7 +650,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           await new Promise((resolve) => setTimeout(resolve, 10));
           onChunk("## First Chunk");
         }
@@ -670,7 +670,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis\n\n");
           await new Promise((resolve) => setTimeout(resolve, 100));
         }
@@ -690,7 +690,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Header\n\n");
           await new Promise((resolve) => setTimeout(resolve, 100));
           onChunk("Content is streaming...");
@@ -712,7 +712,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("Streaming content...");
           await new Promise((resolve) => setTimeout(resolve, 200));
         }
@@ -737,7 +737,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Complete Analysis\n\nAll done!");
         }
       );
@@ -759,7 +759,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Complete\n\n");
           onChunk("Summary: All packages analyzed successfully.\n\n");
           onChunk("Total Packages: 5\n");
@@ -784,7 +784,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Analysis Complete");
         }
       );
@@ -808,7 +808,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Completed Successfully\n\nAnalysis finished.");
         }
       );
@@ -830,7 +830,7 @@ describe("MainPage Component", () => {
       const user = userEvent.setup();
       // mock the 'getAnalysisStream' function
       vi.mocked(api.getAnalysisStream).mockImplementation(
-        async (projectName, file, onChunk) => {
+        async (_projectName, _file, onChunk) => {
           onChunk("## Dependencies Analysis\n\n");
           onChunk("### Package Details\n\n");
           onChunk("- flask: BSD License\n");
