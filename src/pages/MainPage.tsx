@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 import ReactMarkdown from 'react-markdown';
 import { getAnalysisStream } from '../services/api';
 import { useAuth } from '../contexts/auth-context';
@@ -24,8 +23,7 @@ export const MainPage = () => {
     setError(null);
   };
 
-  const handleSubmit = useDebouncedCallback(
-    async () => {
+  const handleSubmit = async () => {
       if (!file || !projectName) {
         setError("Please provide a project name and a requirements.txt file.");
         return;
@@ -49,10 +47,7 @@ export const MainPage = () => {
       } finally {
         setIsLoading(false);
       }
-    },
-    500,
-    { leading: true, trailing: false }
-  );
+    };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
